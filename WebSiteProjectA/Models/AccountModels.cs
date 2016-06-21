@@ -25,7 +25,43 @@ namespace WebSiteProjectA.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
+        [Required]
+        [Display(Name = "User name")]
         public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Email address")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Please type a valid email address")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Please type a valid email address")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "First name")]
+        [StringLength(150, ErrorMessage = "Sorry your first name is too long to fit in the user list")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        [StringLength(150, ErrorMessage = "Sorry your last name is too long to fit in the user list")]
+        public string LastName { get; set; }
+
+
+        [Display(Name = "Middle name")]
+        [StringLength(150, ErrorMessage = "Sorry your middle name is too long to fit in the user list")]
+        public string MiddleName { get; set; }
+
+        [Required]
+        [Display(Name = "Phone number")]
+        [DisplayFormat(DataFormatString = "{0:# ###.###.####}")]
+        [StringLength(20, ErrorMessage = "Sorry your middle name is too long to fit in the user list")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Please type a valid phone number")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Birth Date")]
+        [DataType(DataType.Date, ErrorMessage = "Please enter a valid Date.")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime BirthDate { get; set; }
     }
 
     public class RegisterExternalLoginModel
@@ -46,6 +82,7 @@ namespace WebSiteProjectA.Models
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$", ErrorMessage = "Password should have minimum 8 characters at least 1 alphabet, 1 number and 1 special character")]
         [DataType(DataType.Password)]
         [Display(Name = "New password")]
         public string NewPassword { get; set; }
@@ -76,9 +113,43 @@ namespace WebSiteProjectA.Models
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
+        
+        [Required]
+        [Display(Name = "Email address")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage="Please type a valid email address")]
+        [DataType(DataType.EmailAddress, ErrorMessage= "Please type a valid email address")]
+        public string Email { get; set; }
+        
+        [Required]
+        [Display(Name = "First name")]
+        [StringLength(150, ErrorMessage="Sorry your first name is too long to fit in the user list")]
+        public string FirstName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Display(Name = "Last name")]
+        [StringLength(150, ErrorMessage = "Sorry your last name is too long to fit in the user list")]
+        public string LastName { get; set; }
+
+
+        [Display(Name = "Middle name")]
+        [StringLength(150, ErrorMessage = "Sorry your middle name is too long to fit in the user list")]
+        public string MiddleName { get; set; }
+
+        [Required]
+        [Display(Name = "Phone number")]
+        [DisplayFormat(DataFormatString = "{0:# ###.###.####}")]
+        [StringLength(20, ErrorMessage = "Sorry your middle name is too long to fit in the user list")]
+        [DataType(DataType.PhoneNumber, ErrorMessage="Please type a valid phone number")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Birth Date")]
+        [DataType(DataType.Date, ErrorMessage="Please enter a valid Date.")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime BirthDate { get; set; }
+
+        [Required]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$", ErrorMessage = "Password should have minimum 8 characters at least 1 alphabet, 1 number and 1 special character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

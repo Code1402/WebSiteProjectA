@@ -1,58 +1,63 @@
 ﻿@{
     ViewBag.Title = "Role Add To User";
 }
-<div class="spacerBody">
+<div class="featured">
     <p>&nbsp;</p>
     @Html.ActionLink("Create New Role", "RoleCreate") | @Html.ActionLink("Roles", "RoleIndex")
 
-    <h2>Role Add to User</h2>
+    <h2>Add Role to User</h2>
+
 
     @using (Html.BeginForm("RoleAddToUser", "Account"))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
+        <div style="border:ridge;padding:5px 5px 5px 5px;">
+            <div class="message-success">@ViewBag.ResultMessage</div>
+            <p>
+                Username : @Html.TextBox("UserName")
+                Role Name: @Html.DropDownList("RoleName", ViewBag.Roles as SelectList)
 
-        <div class="message-success">@ViewBag.ResultMessage</div>
-        <p>
-            Username : @Html.TextBox("UserName")
-            Role Name: @Html.DropDownList("RoleName", ViewBag.Roles as SelectList)
+            </p>
 
-        </p>
-
-        <input type="submit" value="Save" />
+            <input type="submit" value="Save" />
+        </div>
     }
 
+    <h2>Get User Roles</h2>
+    <div style="border:ridge;padding:5px 5px 5px 5px;">
+        <div class="hr"></div>
+        @using (Html.BeginForm("GetRoles", "Account"))
+        {
+            @Html.AntiForgeryToken()
 
+            <p>
+                Username : @Html.TextBox("UserName")
+                <input type="submit" value="Get Roles for this User" />
+            </p>
 
-    <div class="hr"></div>
-    @using (Html.BeginForm("GetRoles", "Account"))
-    {
-        @Html.AntiForgeryToken()
-        <p>
-            Username : @Html.TextBox("UserName")
-            <input type="submit" value="Get Roles for this User" />
-        </p>
-    }
+        }
+        @if (ViewBag.RolesForThisUser != null)
+        {
+            <text>
+                <h3>Roles for this user </h3>
+                <ol>
+                    @foreach (string s in ViewBag.RolesForThisUser)
+                    {
+                        <li>@s</li>
+                    }
+                </ol>
+            </text>
+        }
+    </div>
 
-    @if (ViewBag.RolesForThisUser != null)
-    {
-        <text>
-            <h3>Roles for this user </h3>
-            <ol>
-                @foreach (string s in ViewBag.RolesForThisUser)
-                {
-                    <li>@s</li>
-                }
-            </ol>
-        </text>
-    }
     <h3>Delete A User from a Role</h3>
 
     @using (Html.BeginForm("DeleteRoleForUser", "Account"))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-
+        <div style="border:ridge;padding:5px 5px 5px 5px;">
         <p>
             Username : @Html.TextBox("UserName")
             Role Name: @Html.DropDownList("RoleName", ViewBag.Roles as SelectList)
@@ -60,5 +65,6 @@
         </p>
 
         <input type="submit" value="Delete this user from Role" />
+        </div>
     }
 </div>

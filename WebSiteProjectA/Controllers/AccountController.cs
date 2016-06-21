@@ -10,6 +10,8 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using WebSiteProjectA.Filters;
 using WebSiteProjectA.Models;
+using BotDetect.Web.Mvc;
+using System.Data;
 
 namespace WebSiteProjectA.Controllers
 {
@@ -17,6 +19,139 @@ namespace WebSiteProjectA.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private UsersContext db = new UsersContext();
+        private string tempPassword = "Winter123@";
+
+        // GET: /Account/IndexUsers
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult IndexUsers()
+        {
+            return View(db.UserProfiles.ToList());
+        }
+
+        //
+        // GET: /Account/UserDetails/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult UserDetails(int id = 0)
+        {
+            UserProfile userprofile = db.UserProfiles.Find(id);
+            if (userprofile == null)
+            {
+                return HttpNotFound();
+            }
+            return View(userprofile);
+        }
+
+        //
+        // GET: /Account/CreateUser
+        [Authorize(Roles = "Administrator")]
+        public ActionResult CreateUser()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/CreateUser
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult CreateUser(UserProfile model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    WebSecurity.CreateUserAndAccount(model.UserName, tempPassword,
+                                                        propertyValues: new
+                                                        {
+                                                            Email = model.Email,
+                                                            FirstName = model.FirstName,
+                                                            LastName = model.LastName,
+                                                            MiddleName = model.MiddleName,
+                                                            PhoneNumber = model.PhoneNumber,
+                                                            BirthDate = model.BirthDate,
+                                                        });
+                    return RedirectToAction("IndexUsers");
+                }
+                catch (MembershipCreateUserException e)
+                {
+                    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
+                }
+            }
+
+            return View(model);
+        }
+
+        //
+        // GET: /Account/EditUser/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult EditUser(int id = 0)
+        {
+            UserProfile userprofile = db.UserProfiles.Find(id);
+            if (userprofile == null)
+            {
+                return HttpNotFound();
+            }
+            return View(userprofile);
+        }
+
+        //
+        // POST: /Account/EditUser/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult EditUser(UserProfile userprofile)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(userprofile).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("IndexUsers");
+            }
+            return View(userprofile);
+        }
+
+        //
+        // GET: /Account/DeleteUser/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult DeleteUser(int id = 0)
+        {
+            UserProfile userprofile = db.UserProfiles.Find(id);
+            if (userprofile == null)
+            {
+                return HttpNotFound();
+            }
+            return View(userprofile);
+        }
+
+        //
+        // POST: /Account/DeleteUser/5
+        [Authorize(Roles = "Administrator")]
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            UserProfile userprofile = db.UserProfiles.Find(id);
+            if (Roles.GetRolesForUser(userprofile.UserName) == null) { 
+                if (Roles.IsUserInRole(userprofile.UserName, Roles.GetRolesForUser(userprofile.UserName).FirstOrDefault())) 
+                { 
+                    Roles.RemoveUserFromRole(userprofile.UserName, Roles.GetRolesForUser(userprofile.UserName).FirstOrDefault());
+                }
+            }
+            db.UserProfiles.Remove(userprofile);
+            db.SaveChanges();
+            return RedirectToAction("IndexUsers");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
+        }
+        //------------------------------------------------------------
         //
         // GET: /Account/Login
 
@@ -71,6 +206,7 @@ namespace WebSiteProjectA.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [CaptchaValidation("CaptchaCode", "ExampleCaptcha", "Incorrect CAPTCHA code!")]
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel model)
         {
@@ -79,7 +215,15 @@ namespace WebSiteProjectA.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, 
+                                                        propertyValues: new {
+                                                            Email= model.Email,
+                                                            FirstName= model.FirstName,
+                                                            LastName= model.LastName,
+                                                            MiddleName= model.MiddleName,
+                                                            PhoneNumber= model.PhoneNumber,
+                                                            BirthDate = model.BirthDate,
+                                                        });
                     WebSecurity.Login(model.UserName, model.Password);
                     return RedirectToAction("Index", "Home");
                 }
@@ -107,7 +251,7 @@ namespace WebSiteProjectA.Controllers
             if (ownerAccount == User.Identity.Name)
             {
                 // Use a transaction to prevent the user from deleting their last login credential
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.Serializable }))
                 {
                     bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
                     if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
@@ -445,6 +589,10 @@ namespace WebSiteProjectA.Controllers
             return View("RoleAddToUser");
         }
 
+        public ActionResult ManageUser() 
+        {
+            return View();
+        }
         #region Helpers
         private ActionResult RedirectToLocal(string returnUrl)
         {

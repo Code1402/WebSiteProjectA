@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -39,6 +39,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BotDetect">
+      <HintPath>..\packages\Captcha.4.0.1\lib\net40\BotDetect.dll</HintPath>
+    </Reference>
+    <Reference Include="BotDetect.Web.Mvc">
+      <HintPath>..\packages\Captcha.4.0.1\lib\net40\BotDetect.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -195,6 +201,22 @@
     <Compile Include="Migrations\201606160646100_initial.Designer.cs">
       <DependentUpon>201606160646100_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606170412283_UserProfile.cs" />
+    <Compile Include="Migrations\201606170412283_UserProfile.Designer.cs">
+      <DependentUpon>201606170412283_UserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606180325497_UserProfileUpdated.cs" />
+    <Compile Include="Migrations\201606180325497_UserProfileUpdated.Designer.cs">
+      <DependentUpon>201606180325497_UserProfileUpdated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606180328562_UserProfileUpdatedNew.cs" />
+    <Compile Include="Migrations\201606180328562_UserProfileUpdatedNew.Designer.cs">
+      <DependentUpon>201606180328562_UserProfileUpdatedNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606210649018_Admin-Control.cs" />
+    <Compile Include="Migrations\201606210649018_Admin-Control.Designer.cs">
+      <DependentUpon>201606210649018_Admin-Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -313,6 +335,11 @@
     <Content Include="Views\Account\RoleCreate.cshtml" />
     <Content Include="Views\Account\RoleIndex.cshtml" />
     <Content Include="Views\Account\RoleAddToUser.cshtml" />
+    <Content Include="Views\Account\IndexUsers.cshtml" />
+    <Content Include="Views\Account\UserDetails.cshtml" />
+    <Content Include="Views\Account\CreateUser.cshtml" />
+    <Content Include="Views\Account\EditUser.cshtml" />
+    <Content Include="Views\Account\DeleteUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -323,6 +350,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201606160646100_initial.resx">
       <DependentUpon>201606160646100_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606170412283_UserProfile.resx">
+      <DependentUpon>201606170412283_UserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606180325497_UserProfileUpdated.resx">
+      <DependentUpon>201606180325497_UserProfileUpdated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606180328562_UserProfileUpdatedNew.resx">
+      <DependentUpon>201606180328562_UserProfileUpdatedNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606210649018_Admin-Control.resx">
+      <DependentUpon>201606210649018_Admin-Control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

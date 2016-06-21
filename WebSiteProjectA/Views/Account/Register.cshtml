@@ -1,4 +1,5 @@
 ﻿@model WebSiteProjectA.Models.RegisterModel
+@using BotDetect.Web.Mvc;
 @{
     ViewBag.Title = "Register";
 }
@@ -26,6 +27,35 @@
             <li>
                 @Html.LabelFor(m => m.ConfirmPassword)
                 @Html.PasswordFor(m => m.ConfirmPassword)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.FirstName)
+                @Html.TextBoxFor(m => m.FirstName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.LastName)
+                @Html.TextBoxFor(m => m.LastName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.MiddleName)
+                @Html.TextBoxFor(m => m.MiddleName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.TextBoxFor(m => m.PhoneNumber)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.BirthDate)
+                @Html.EditorFor(m => m.BirthDate)
+            </li>
+            <li>
+                @{ MvcCaptcha exampleCaptcha = new MvcCaptcha("ExampleCaptcha"); }
+                @Html.Captcha(exampleCaptcha)
+                @Html.TextBox("CaptchaCode")
             </li>
         </ol>
         <input type="submit" value="Register" />

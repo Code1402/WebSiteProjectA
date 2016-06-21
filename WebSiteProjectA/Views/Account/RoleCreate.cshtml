@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "RoleCreate";
+    ViewBag.Title = "Role Create";
 }
-<div class="spacerBody">
+<div class="featured">
     <p>&nbsp;</p>
     @Html.ActionLink("Roles", "RoleIndex") | @Html.ActionLink("Add Role to User", "RoleAddToUser")
     <h2>Role Create</h2>
@@ -11,9 +11,9 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
 
-        <div>
+        <h3>
             Role name
-        </div>
+        </h3>
         <p>
             @Html.TextBox("RoleName")
         </p>
